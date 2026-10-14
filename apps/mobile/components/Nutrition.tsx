@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { LIMIT_NUTRIENTS, NUTRIENT_META, type NutrientKey, type Nutrients, type Suggestion } from "@nutrisnap/shared";
+import { LIMIT_NUTRIENTS, NUTRIENT_META, type NutrientKey, type Nutrients, type Suggestion } from "@nomclock/shared";
 import { useTheme } from "@/lib/theme";
 import { T } from "./ui";
 

@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import {
   FEEDBACK_AREAS, FEEDBACK_KINDS, STATUS_LABEL,
   type FeedbackArea, type FeedbackItem, type FeedbackKind,
-} from "@nutrisnap/shared";
+} from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { prepareMealPhoto } from "@/lib/image";
@@ -76,7 +76,7 @@ function SuggestForm({ onSent, initialArea }: { onSent: () => void; initialArea:
       </label>
       {err && <p className="error" role="alert">{err}</p>}
       <div><button className="btn" disabled={busy || title.trim().length < 3}>{busy ? "Sending…" : "Send suggestion"}</button></div>
-      <p className="small soft">Only the NutriSnap team sees your suggestion. If we add it to the public ideas board, your name isn't shown.</p>
+      <p className="small soft">Only the NomClock team sees your suggestion. If we add it to the public ideas board, your name isn't shown.</p>
     </form>
   );
 }
@@ -163,7 +163,7 @@ function FeedbackInner() {
     <div style={{ display: "grid", gap: 22, maxWidth: 760 }}>
       <div>
         <h1>Ideas and feedback</h1>
-        <p className="soft">Tell us what to add or change in NutriSnap, and vote on ideas from other people.</p>
+        <p className="soft">Tell us what to add or change in NomClock, and vote on ideas from other people.</p>
       </div>
       <div className="seg" role="group" aria-label="Section">
         <button aria-pressed={view === "suggest"} onClick={() => setView("suggest")}>Suggest</button>

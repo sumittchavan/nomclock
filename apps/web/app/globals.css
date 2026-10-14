@@ -64,7 +64,7 @@ a { color: inherit; }
 
 /* ── nav ── */
 .nav { display: flex; align-items: center; gap: 24px; max-width: 1120px; margin: 0 auto; padding: 16px; }
-.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; text-decoration: none; letter-spacing: -0.02em; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; text-decoration: none; letter-spacing: -0.035em; display: inline-flex; align-items: center; gap: 8px; }
 .nav-links { display: flex; gap: 4px; margin-left: auto; }
 .nav-links a { text-decoration: none; padding: 8px 14px; border-radius: 999px; color: var(--ink-soft); }
 .nav-links a[aria-current="page"] { background: var(--ink); color: var(--porcelain); }

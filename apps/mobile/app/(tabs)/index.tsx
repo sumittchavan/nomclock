@@ -1,4 +1,4 @@
-import { localDateKey } from "@nutrisnap/shared";
+import { localDateKey } from "@nomclock/shared";
 import { useSession } from "@/lib/session";
 import { DayScreen } from "@/components/DayScreen";
 

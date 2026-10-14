@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { localHour, slotForHour, type MealSlot } from "@nutrisnap/shared";
+import { localHour, slotForHour, type MealSlot } from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { prepareMealPhoto } from "@/lib/image";
 import { useSession } from "@/lib/session";

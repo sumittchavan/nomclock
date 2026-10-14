@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { RefreshControl, ScrollView, View, type LayoutChangeEvent } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { localDateKey, localRange, sumMeals, suggestForDay, type MealWithStatus } from "@nutrisnap/shared";
+import { localDateKey, localRange, sumMeals, suggestForDay, type MealWithStatus } from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { useTheme } from "@/lib/theme";
@@ -77,7 +77,7 @@ export function DayScreen({ dateKey, title, header }: { dateKey: string; title?:
         <View onLayout={(e: LayoutChangeEvent) => { mealsTop.current = e.nativeEvent.layout.y; }}>
           <Section title="Meals">
             {meals.length === 0 ? (
-              <T soft>Photograph a meal and NutriSnap fills in the nutrition for you.</T>
+              <T soft>Photograph a meal and NomClock fills in the nutrition for you.</T>
             ) : (
               <View>
                 {meals.map((m) => (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Pressable, View, useWindowDimensions } from "react-native";
 import Svg, { Circle, ClipPath, Defs, G, Image as SvgImage, Line, Text as SvgText } from "react-native-svg";
-import { localHour, mealTotals, type Meal, type Nutrients } from "@nutrisnap/shared";
+import { localHour, mealTotals, type Meal, type Nutrients } from "@nomclock/shared";
 import { useTheme } from "@/lib/theme";
 import { T } from "./ui";
 

@@ -22,7 +22,7 @@ const securityHeaders = [
 ];
 
 export default {
-  transpilePackages: ["@nutrisnap/shared"],
+  transpilePackages: ["@nomclock/shared"],
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

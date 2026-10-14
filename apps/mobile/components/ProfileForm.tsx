@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View } from "react-native";
-import { computeTargets, type Profile } from "@nutrisnap/shared";
+import { computeTargets, type Profile } from "@nomclock/shared";
 import { useTheme } from "@/lib/theme";
 import { Button, Chips, Field, Section, T } from "./ui";
 
@@ -31,7 +31,7 @@ export function ProfileForm({ initial, userId, submitLabel, onSave }: {
     if (!validDate) return setErr("Enter your date of birth as YYYY-MM-DD.");
     setBusy(true); setErr(null);
     try { await onSave(full); }
-    catch (e: any) { setErr(e?.message?.includes("adult") ? "NutriSnap is for adults 18 and over." : e?.message ?? "Couldn't save your profile."); }
+    catch (e: any) { setErr(e?.message?.includes("adult") ? "NomClock is for adults 18 and over." : e?.message ?? "Couldn't save your profile."); }
     setBusy(false);
   };
 

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { addDays, localDateKey, type DailyTotal } from "@nutrisnap/shared";
+import { addDays, localDateKey, type DailyTotal } from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { DayView } from "@/components/DayView";

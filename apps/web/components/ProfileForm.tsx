@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { computeTargets, type Profile } from "@nutrisnap/shared";
+import { computeTargets, type Profile } from "@nomclock/shared";
 
 const COUNTRIES: [string, string][] = [
   ["CA", "Canada"], ["US", "United States"], ["IN", "India"], ["GB", "United Kingdom"], ["AU", "Australia"],
@@ -35,7 +35,7 @@ export function ProfileForm({ initial, userId, onSave, submitLabel }: {
     try {
       await onSave({ ...p, tastes: csv(tastes), avoid: csv(avoid) });
     } catch (e: any) {
-      setErr(e?.message?.includes("adult") ? "NutriSnap is for adults 18 and over." : e?.message ?? "Couldn't save your profile.");
+      setErr(e?.message?.includes("adult") ? "NomClock is for adults 18 and over." : e?.message ?? "Couldn't save your profile.");
     }
     setBusy(false);
   };

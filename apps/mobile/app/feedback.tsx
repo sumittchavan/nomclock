@@ -8,7 +8,7 @@ import Svg, { Path } from "react-native-svg";
 import {
   FEEDBACK_AREAS, FEEDBACK_KINDS, STATUS_LABEL,
   type FeedbackArea, type FeedbackItem, type FeedbackKind,
-} from "@nutrisnap/shared";
+} from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { fonts, useTheme } from "@/lib/theme";
@@ -89,7 +89,7 @@ function Suggest({ initialArea, onSent }: { initialArea: FeedbackArea; onSent: (
       </View>
       {err && <T style={{ color: t.warn }} accessibilityRole="alert">{err}</T>}
       <Button title={busy ? "Sending…" : "Send suggestion"} busy={busy} disabled={title.trim().length < 3} onPress={submit} />
-      <T v="small" soft>Only the NutriSnap team sees your suggestion. If we add it to the public ideas board, your name isn't shown.</T>
+      <T v="small" soft>Only the NomClock team sees your suggestion. If we add it to the public ideas board, your name isn't shown.</T>
     </View>
   );
 }
@@ -174,7 +174,7 @@ export default function FeedbackScreen() {
       <ScrollView contentContainerStyle={{ paddingTop: insets.top + 12, paddingHorizontal: 16, paddingBottom: 60, gap: 16 }} keyboardShouldPersistTaps="handled">
         <Button small kind="ghost" title="‹ Back" onPress={() => router.back()} style={{ alignSelf: "flex-start" }} />
         <T v="h1">Ideas and feedback</T>
-        <T soft>Tell us what to add or change in NutriSnap, and vote on ideas from other people.</T>
+        <T soft>Tell us what to add or change in NomClock, and vote on ideas from other people.</T>
         <View style={{ flexDirection: "row", borderWidth: 1.5, borderColor: t.line, borderRadius: 999, padding: 3, alignSelf: "flex-start" }} accessibilityRole="tablist">
           {([["suggest", "Suggest"], ["board", "Ideas board"], ["mine", "Yours"]] as [View_, string][]).map(([v, l]) => (
             <Pressable key={v} onPress={() => setView(v)} accessibilityRole="tab" accessibilityState={{ selected: v === view }}

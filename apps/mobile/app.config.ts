@@ -1,24 +1,24 @@
 import type { ExpoConfig } from "expo/config";
 
 const config: ExpoConfig = {
-  name: "NutriSnap",
-  slug: "nutrisnap",
-  scheme: "nutrisnap",
+  name: "NomClock",
+  slug: "nomclock",
+  scheme: "nomclock",
   version: "0.1.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "automatic",
   ios: {
-    bundleIdentifier: process.env.IOS_BUNDLE_ID ?? "com.nutrisnap.app",
+    bundleIdentifier: process.env.IOS_BUNDLE_ID ?? "com.nomclock.app",
     supportsTablet: true,
     config: { usesNonExemptEncryption: false },
     infoPlist: {
-      NSCameraUsageDescription: "NutriSnap uses the camera to photograph your meals so it can estimate their nutrition.",
-      NSPhotoLibraryUsageDescription: "NutriSnap lets you choose meal photos you've already taken.",
+      NSCameraUsageDescription: "NomClock uses the camera to photograph your meals so it can estimate their nutrition.",
+      NSPhotoLibraryUsageDescription: "NomClock lets you choose meal photos you've already taken.",
     },
   },
   android: {
-    package: process.env.ANDROID_PACKAGE ?? "com.nutrisnap.app",
+    package: process.env.ANDROID_PACKAGE ?? "com.nomclock.app",
     adaptiveIcon: {
       foregroundImage: "./assets/android-icon-foreground.png",
       backgroundImage: "./assets/android-icon-background.png",
@@ -33,13 +33,13 @@ const config: ExpoConfig = {
     "expo-font",
     [
       "expo-splash-screen",
-      { image: "./assets/splash-icon.png", imageWidth: 180, resizeMode: "contain", backgroundColor: "#F3F6F5", dark: { backgroundColor: "#15172B" } },
+      { image: "./assets/splash-icon.png", imageWidth: 180, resizeMode: "contain", backgroundColor: "#F3F6F5", dark: { image: "./assets/splash-icon-dark.png", backgroundColor: "#15172B" } },
     ],
     [
       "expo-image-picker",
       {
-        cameraPermission: "NutriSnap uses the camera to photograph your meals so it can estimate their nutrition.",
-        photosPermission: "NutriSnap lets you choose meal photos you've already taken.",
+        cameraPermission: "NomClock uses the camera to photograph your meals so it can estimate their nutrition.",
+        photosPermission: "NomClock lets you choose meal photos you've already taken.",
         microphonePermission: false,
       },
     ],

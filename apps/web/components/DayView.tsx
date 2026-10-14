@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   localDateKey, localRange, sumMeals, suggestForDay, zonedMidnight, type MealWithStatus,
-} from "@nutrisnap/shared";
+} from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { PlateClock } from "./PlateClock";
@@ -92,7 +92,7 @@ export function DayView({ dateKey, title }: { dateKey: string; title?: string })
           <MealList meals={meals} photoUrls={photoUrls} timeZone={tz} highlightId={highlight} onChanged={load} />
         ) : !loading && (
           <div className="empty">
-            <p className="soft">Photograph a meal and NutriSnap fills in the nutrition for you.</p>
+            <p className="soft">Photograph a meal and NomClock fills in the nutrition for you.</p>
             <button className="btn" onClick={() => setAdding(true)}>Add a meal</button>
           </div>
         )}

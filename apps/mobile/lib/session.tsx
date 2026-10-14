@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
-import { computeTargets, type Profile, type Targets } from "@nutrisnap/shared";
+import { computeTargets, type Profile, type Targets } from "@nomclock/shared";
 import { api, supabase } from "./supabase";
 
 interface Ctx {

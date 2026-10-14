@@ -19,7 +19,7 @@ const DIET_LABEL: Record<string, string> = {
   keto: "keto (very low carb)",
 };
 
-const SYSTEM = `You are NutriSnap's food coach, chatting inside a calorie-tracking app.
+const SYSTEM = `You are NomClock's food coach, chatting inside a calorie-tracking app.
 
 How to help:
 - Be practical and specific. When someone has a craving or is about to order, give 2–4 concrete options that still

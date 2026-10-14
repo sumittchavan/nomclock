@@ -1,5 +1,5 @@
 "use client";
-import { LIMIT_NUTRIENTS, NUTRIENT_META, type NutrientKey, type Nutrients } from "@nutrisnap/shared";
+import { LIMIT_NUTRIENTS, NUTRIENT_META, type NutrientKey, type Nutrients } from "@nomclock/shared";
 
 const MACROS: { key: NutrientKey; color: string }[] = [
   { key: "protein", color: "var(--protein)" },

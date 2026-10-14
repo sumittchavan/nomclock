@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, View } from "react-native";
-import { addDays, localDateKey, type DailyTotal } from "@nutrisnap/shared";
+import { addDays, localDateKey, type DailyTotal } from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { fonts, useTheme } from "@/lib/theme";

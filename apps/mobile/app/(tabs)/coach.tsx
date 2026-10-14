@@ -6,7 +6,7 @@ import * as Haptics from "expo-haptics";
 import {
   COACH_STARTERS, buildCoachContext, localDateKey, localHour, localRange, optionToItem, slotForHour, sumMeals,
   type ChatTurn, type CoachOption, type MealWithStatus,
-} from "@nutrisnap/shared";
+} from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { fonts, useTheme } from "@/lib/theme";

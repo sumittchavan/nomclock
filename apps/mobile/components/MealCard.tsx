@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Alert, TextInput, View } from "react-native";
 import { Image } from "expo-image";
-import { mealTotals, type FoodItem, type MealWithStatus } from "@nutrisnap/shared";
+import { mealTotals, type FoodItem, type MealWithStatus } from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { fonts, useTheme } from "@/lib/theme";
 import { Button, T } from "./ui";

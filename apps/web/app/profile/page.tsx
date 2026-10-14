@@ -17,7 +17,7 @@ export default function ProfilePage() {
     setBusy("export");
     const data = await api.exportMyData();
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
-    const a = Object.assign(document.createElement("a"), { href: url, download: `nutrisnap-export-${data.exportedAt.slice(0, 10)}.json` });
+    const a = Object.assign(document.createElement("a"), { href: url, download: `nomclock-export-${data.exportedAt.slice(0, 10)}.json` });
     a.click();
     URL.revokeObjectURL(url);
     setBusy(null);

@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { supabase } from "@/lib/supabase";
 import { useTheme } from "@/lib/theme";
 import { Button, Field, T } from "@/components/ui";
+import { BrandMark } from "@/components/BrandMark";
 
 export default function Login() {
   const t = useTheme();
@@ -19,7 +20,7 @@ export default function Login() {
     setBusy(true); setErr(null); setMsg(null);
     const { error } = mode === "signin"
       ? await supabase.auth.signInWithPassword({ email: email.trim(), password })
-      : await supabase.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: "nutrisnap://auth-callback" } });
+      : await supabase.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: "nomclock://auth-callback" } });
     setBusy(false);
     if (error) setErr(error.message);
     else if (mode === "signup") setMsg("Check your email to confirm your account, then sign in.");
@@ -28,7 +29,8 @@ export default function Login() {
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: t.bg }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
       <ScrollView contentContainerStyle={{ paddingTop: insets.top + 64, paddingHorizontal: 20, gap: 18 }} keyboardShouldPersistTaps="handled">
-        <T v="h1" style={{ fontSize: 40, lineHeight: 44 }}>NutriSnap</T>
+        <BrandMark size={84} />
+        <T v="h1" style={{ fontSize: 44, lineHeight: 48, letterSpacing: -1.5 }} accessibilityRole="header">nomclock</T>
         <T soft>Photograph what you eat. See your calories, macros and vitamins add up through the day.</T>
         <T v="h2" style={{ marginTop: 12 }}>{mode === "signin" ? "Sign in" : "Create your account"}</T>
         <Field label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" autoComplete="email" keyboardType="email-address" textContentType="emailAddress" />

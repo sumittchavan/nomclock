@@ -1,4 +1,4 @@
-import type { Suggestion } from "@nutrisnap/shared";
+import type { Suggestion } from "@nomclock/shared";
 
 export function Coach({ suggestions }: { suggestions: Suggestion[] }) {
   if (!suggestions.length) return <p className="soft">Log a meal to get suggestions.</p>;

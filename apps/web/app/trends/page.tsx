@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Bar, BarChart, CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
-import { addDays, isoWeekKey, localDateKey, rollUp, type DailyTotal, type TrendPeriod } from "@nutrisnap/shared";
+import { addDays, isoWeekKey, localDateKey, rollUp, type DailyTotal, type TrendPeriod } from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 

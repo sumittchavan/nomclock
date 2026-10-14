@@ -1,5 +1,5 @@
 "use client";
-import { localDateKey } from "@nutrisnap/shared";
+import { localDateKey } from "@nomclock/shared";
 import { useSession } from "@/lib/session";
 import { DayView } from "@/components/DayView";
 

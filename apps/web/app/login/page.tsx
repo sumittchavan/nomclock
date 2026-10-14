@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { BrandMark } from "@/components/BrandMark";
 
 export default function LoginPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -23,6 +24,7 @@ export default function LoginPage() {
 
   return (
     <div style={{ maxWidth: 420, margin: "8vh auto 0", display: "grid", gap: 22 }}>
+      <BrandMark size={72} label="NomClock" />
       <div>
         <h1>{mode === "signin" ? "Sign in" : "Create your account"}</h1>
         <p className="soft">Photograph what you eat. See your calories, macros and vitamins add up through the day.</p>

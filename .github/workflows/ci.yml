@@ -19,7 +19,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Unit tests (targets, aggregation, suggestions)
-        run: pnpm --filter @nutrisnap/shared test
+        run: pnpm --filter @nomclock/shared test
 
       - name: Database security checks (RLS, storage, cascade delete)
         run: pnpm test:db

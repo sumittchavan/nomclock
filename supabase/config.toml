@@ -1,4 +1,4 @@
-project_id = "nutrisnap"
+project_id = "nomclock"
 
 [api]
 port = 54321
@@ -13,7 +13,7 @@ file_size_limit = "8MiB"
 
 [auth]
 site_url = "http://localhost:3000"
-additional_redirect_urls = ["nutrisnap://auth-callback"]
+additional_redirect_urls = ["nomclock://auth-callback"]
 jwt_expiry = 3600
 enable_signup = true
 

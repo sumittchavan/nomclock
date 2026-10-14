@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import * as Crypto from "expo-crypto";
 import { AppState, Platform } from "react-native";
 import { createClient } from "@supabase/supabase-js";
-import { createApi } from "@nutrisnap/shared";
+import { createApi } from "@nomclock/shared";
 
 // Hermes has no crypto.randomUUID; the shared API uses it for meal ids.
 const g = globalThis as any;

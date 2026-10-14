@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { mealTotals, type FoodItem, type MealWithStatus } from "@nutrisnap/shared";
+import { mealTotals, type FoodItem, type MealWithStatus } from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 
 const SOURCE_LABEL: Record<string, string> = {

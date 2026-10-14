@@ -12,8 +12,8 @@ export async function pickPhoto(source: PickSource): Promise<Picked | null> {
     ? await ImagePicker.requestCameraPermissionsAsync()
     : await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (!perm.granted) throw new Error(source === "camera"
-    ? "Camera access is off. Turn it on for NutriSnap in Settings to photograph meals."
-    : "Photo access is off. Turn it on for NutriSnap in Settings to choose meal photos.");
+    ? "Camera access is off. Turn it on for NomClock in Settings to photograph meals."
+    : "Photo access is off. Turn it on for NomClock in Settings to choose meal photos.");
   const opts: ImagePicker.ImagePickerOptions = { mediaTypes: ["images"], quality: 1, exif: false, allowsEditing: false };
   const res = source === "camera" ? await ImagePicker.launchCameraAsync(opts) : await ImagePicker.launchImageLibraryAsync(opts);
   if (res.canceled) return null;

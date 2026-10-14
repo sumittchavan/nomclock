@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
-import { localDateKey, localHour, slotForHour, zonedMidnight, type MealSlot } from "@nutrisnap/shared";
+import { localDateKey, localHour, slotForHour, zonedMidnight, type MealSlot } from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { useTheme } from "@/lib/theme";

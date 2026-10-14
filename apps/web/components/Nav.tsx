@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "@/lib/session";
+import { BrandMark } from "./BrandMark";
 
 const LINKS = [
   { href: "/", label: "Today" },
@@ -16,7 +17,7 @@ export function Nav() {
   const { session, profile } = useSession();
   return (
     <header className="nav">
-      <Link href="/" className="brand">NutriSnap</Link>
+      <Link href="/" className="brand" aria-label="NomClock home"><BrandMark size={30} /><span>nomclock</span></Link>
       {session && profile && (
         <nav className="nav-links" aria-label="Main">
           {LINKS.map((l) => (

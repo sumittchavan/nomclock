@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { localHour, mealTotals, type Meal, type Nutrients } from "@nutrisnap/shared";
+import { localHour, mealTotals, type Meal, type Nutrients } from "@nomclock/shared";
 
 const C = 200;
 const R_KCAL = 148;

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FEEDBACK_AREAS, FEEDBACK_KINDS, STATUS_LABEL,
   type FeedbackArea, type FeedbackItem, type FeedbackKind, type FeedbackStatus,
-} from "@nutrisnap/shared";
+} from "@nomclock/shared";
 import { api } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 
@@ -89,7 +89,7 @@ export default function AdminPage() {
   }, [items]);
 
   if (!profile || allowed === null) return null;
-  if (!allowed) return <div className="empty"><h1>Not available</h1><p className="soft">This page is for the NutriSnap team.</p></div>;
+  if (!allowed) return <div className="empty"><h1>Not available</h1><p className="soft">This page is for the NomClock team.</p></div>;
 
   const shown = filter === "all" ? items : items.filter((i) => i.status === filter);
   return (

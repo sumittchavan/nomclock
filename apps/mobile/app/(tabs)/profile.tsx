@@ -20,7 +20,7 @@ export default function ProfileTab() {
     setBusy("export");
     const data = await api.exportMyData();
     setBusy(null);
-    await Share.share({ title: "NutriSnap data export", message: JSON.stringify(data, null, 2) });
+    await Share.share({ title: "NomClock data export", message: JSON.stringify(data, null, 2) });
   };
 
   const deleteAccount = () =>

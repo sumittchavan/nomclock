@@ -1,4 +1,4 @@
--- NutriSnap initial schema
+-- NomClock initial schema
 -- Every table is protected by row-level security: a user can only ever read or
 -- write their own rows. Photos live in a private bucket under <user_id>/...
 

@@ -1,4 +1,4 @@
-# NutriSnap
+# NomClock
 
 Photograph your meals; see calories, macros, vitamins and minerals add up through the day; get practical
 suggestions (portion changes, swaps that fit your diet, budget and tastes, and when to eat). Web, iOS and Android,
@@ -12,6 +12,13 @@ supabase/        Postgres schema + row-level security, private photo storage, ed
 scripts/         Database security test (runs in CI)
 .github/         CI on every PR; deploy on push to main / version tag
 ```
+
+## Brand
+
+The logo is the "Happy plate": a smiling plate with a bite out of its rim, which doubles as the clock face of the
+Today screen. Source SVGs live in `brand/` (`mark.svg` full logo, `icon-mark.svg` app icon, `icon-mono.svg` Android
+themed icon, `favicon.svg`). After editing them, regenerate every icon size with `python3 brand/render.py`.
+Colours: saffron `#E3A51A` (icon ground), aubergine ink `#1F2340`, beet `#B4245C`, olive `#6E7D2B`, porcelain `#F3F6F5`.
 
 ## How it works
 
@@ -100,7 +107,7 @@ You'll need accounts with: **GitHub**, **Supabase**, **Vercel**, **Expo**, **Ant
 
 ### 1. Supabase
 1. Create a project and choose region **Canada (Central)**.
-2. Under Authentication → URL configuration, add your web URL and `nutrisnap://auth-callback`.
+2. Under Authentication → URL configuration, add your web URL and `nomclock://auth-callback`.
 3. Note the project ref, URL, anon key, and database password, and create an access token (Account → Access tokens).
 
 ### 2. Vercel
@@ -118,7 +125,7 @@ npx eas-cli env:create --environment production --name EXPO_PUBLIC_SUPABASE_ANON
 npx eas-cli env:create --environment production --name EAS_PROJECT_ID --value YOUR_PROJECT_ID --visibility plaintext
 npx eas-cli credentials               # lets EAS manage iOS certificates and the Android keystore
 ```
-Set your own `IOS_BUNDLE_ID` / `ANDROID_PACKAGE` (EAS env vars) if you don't want `com.nutrisnap.app`.
+Set your own `IOS_BUNDLE_ID` / `ANDROID_PACKAGE` (EAS env vars) if you don't want `com.nomclock.app`.
 For store submission, connect your App Store Connect API key and a Google Play service-account key in EAS (`eas credentials`).
 Do the first Play Store upload by hand. Google requires it before API submissions work.
 

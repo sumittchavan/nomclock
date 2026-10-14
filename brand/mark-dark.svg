@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="NomClock">
+  <defs>
+    <mask id="bite">
+      <rect width="200" height="200" fill="#fff"/>
+      <circle cx="168" cy="44" r="20" fill="#000"/>
+      <circle cx="185" cy="67" r="15" fill="#000"/>
+      <circle cx="149" cy="25" r="14" fill="#000"/>
+    </mask>
+  </defs>
+  <g mask="url(#bite)">
+    <circle cx="100" cy="100" r="86" fill="#FFFFFF" stroke="#E3A51A" stroke-width="9"/>
+    <circle cx="100" cy="100" r="62" fill="none" stroke="#E2E8E6" stroke-width="4"/>
+  </g>
+  <g stroke="#E3A51A" stroke-width="5" stroke-linecap="round">
+    <line x1="100" y1="22" x2="100" y2="31"/><line x1="178" y1="100" x2="169" y2="100"/>
+    <line x1="100" y1="178" x2="100" y2="169"/><line x1="22" y1="100" x2="31" y2="100"/>
+  </g>
+  <ellipse cx="82" cy="93" rx="6" ry="8.5" fill="#1F2340"/><ellipse cx="118" cy="93" rx="6" ry="8.5" fill="#1F2340"/>
+  <circle cx="84" cy="90" r="2" fill="#FFFFFF"/><circle cx="120" cy="90" r="2" fill="#FFFFFF"/>
+  <ellipse cx="65" cy="112" rx="10" ry="6" fill="#B4245C" opacity="0.28"/><ellipse cx="135" cy="112" rx="10" ry="6" fill="#B4245C" opacity="0.28"/>
+  <path d="M85 113 Q100 129 115 113" fill="none" stroke="#1F2340" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="190" cy="34" r="4.5" fill="#F3F6F5"/><circle cx="196" cy="50" r="3" fill="#F3F6F5"/><circle cx="176" cy="14" r="3" fill="#F3F6F5"/>
+</svg>

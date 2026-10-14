@@ -10,8 +10,10 @@ import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NutriSnap",
+  title: "NomClock",
   description: "Photograph your meals, see your day's nutrition, get practical suggestions.",
+  applicationName: "NomClock",
+  manifest: "/manifest.webmanifest",
 };
 
 export const viewport: Viewport = {

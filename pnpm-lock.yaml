@@ -24,7 +24,7 @@ importers:
       '@expo-google-fonts/bricolage-grotesque':
         specifier: ^0.4.1
         version: 0.4.1
-      '@nutrisnap/shared':
+      '@nomclock/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@react-native-async-storage/async-storage':
@@ -112,7 +112,7 @@ importers:
       '@fontsource/bricolage-grotesque':
         specifier: ^5.3.0
         version: 5.3.0
-      '@nutrisnap/shared':
+      '@nomclock/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@supabase/supabase-js':

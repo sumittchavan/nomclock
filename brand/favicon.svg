@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs><mask id="bite"><rect width="200" height="200" fill="#fff"/><circle cx="168" cy="44" r="28" fill="#000"/><circle cx="188" cy="74" r="22" fill="#000"/></mask></defs>
+  <g mask="url(#bite)"><circle cx="100" cy="100" r="80" fill="#E3A51A" stroke="#1F2340" stroke-width="22"/></g>
+  <circle cx="78" cy="92" r="13" fill="#1F2340"/><circle cx="122" cy="92" r="13" fill="#1F2340"/>
+  <path d="M80 122 Q100 140 120 122" fill="none" stroke="#1F2340" stroke-width="13" stroke-linecap="round"/>
+</svg>
