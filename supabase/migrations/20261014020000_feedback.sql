@@ -11,8 +11,8 @@ create table public.admins (
 alter table public.admins enable row level security;  -- no policies: invisible to clients
 
 create function public.is_admin() returns boolean
-language sql stable security definer set search_path = public as $$
-  select exists (select 1 from public.admins where user_id = auth.uid());
+language sql stable security definer set search_path = '' as $$
+  select exists (select 1 from public.admins where user_id = (select auth.uid()));
 $$;
 
 -- ───────────────────────── feedback ─────────────────────────
@@ -47,14 +47,24 @@ create table public.feedback_votes (
 alter table public.feedback enable row level security;
 alter table public.feedback_votes enable row level security;
 
+-- Counts the caller's submissions in the last 24 h. Security definer so the insert
+-- policy below can use it without re-entering this table's own policies.
+create function public.my_feedback_today() returns bigint
+language sql stable security definer set search_path = '' as $$
+  select count(*) from public.feedback f
+  where f.user_id = (select auth.uid()) and f.created_at > now() - interval '1 day';
+$$;
+revoke execute on function public.my_feedback_today() from public, anon;
+grant execute on function public.my_feedback_today() to authenticated;
+
 -- Users: submit (status/reply/visibility are admin-only; max 10 per day), read own, delete own while still new.
 create policy "submit feedback" on public.feedback for insert with check (
-  user_id = auth.uid()
+  user_id = (select auth.uid())
   and status = 'new' and admin_note is null and is_public = false
-  and (select count(*) from public.feedback f where f.user_id = auth.uid() and f.created_at > now() - interval '1 day') < 10
+  and (select public.my_feedback_today()) < 10
 );
-create policy "read own feedback" on public.feedback for select using (user_id = auth.uid());
-create policy "delete own new feedback" on public.feedback for delete using (user_id = auth.uid() and status = 'new');
+create policy "read own feedback" on public.feedback for select using (user_id = (select auth.uid()));
+create policy "delete own new feedback" on public.feedback for delete using (user_id = (select auth.uid()) and status = 'new');
 
 -- Admins: read and triage everything.
 create policy "admins read feedback" on public.feedback for select using (public.is_admin());
@@ -62,11 +72,11 @@ create policy "admins triage feedback" on public.feedback for update using (publ
 create policy "admins delete feedback" on public.feedback for delete using (public.is_admin());
 
 -- Votes: only on public ideas, one per user, removable.
-create policy "read own votes" on public.feedback_votes for select using (user_id = auth.uid());
+create policy "read own votes" on public.feedback_votes for select using (user_id = (select auth.uid()));
 create policy "vote on public ideas" on public.feedback_votes for insert with check (
-  user_id = auth.uid() and exists (select 1 from public.feedback f where f.id = feedback_id and f.is_public)
+  user_id = (select auth.uid()) and exists (select 1 from public.feedback f where f.id = feedback_id and f.is_public)
 );
-create policy "remove own vote" on public.feedback_votes for delete using (user_id = auth.uid());
+create policy "remove own vote" on public.feedback_votes for delete using (user_id = (select auth.uid()));
 
 create trigger feedback_touch before update on public.feedback
   for each row execute function public.touch_updated_at();
@@ -77,17 +87,18 @@ returns table (
   id uuid, kind text, area text, title text, details text, status text, admin_note text,
   created_at timestamptz, votes bigint, my_vote boolean, mine boolean
 )
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = '' as $$
   select f.id, f.kind, f.area, f.title, f.details, f.status, f.admin_note, f.created_at,
          (select count(*) from public.feedback_votes v where v.feedback_id = f.id),
-         exists (select 1 from public.feedback_votes v where v.feedback_id = f.id and v.user_id = auth.uid()),
-         f.user_id = auth.uid()
+         exists (select 1 from public.feedback_votes v where v.feedback_id = f.id and v.user_id = (select auth.uid())),
+         f.user_id = (select auth.uid())
   from public.feedback f
-  where f.is_public and auth.uid() is not null
+  where f.is_public and (select auth.uid()) is not null
   order by 9 desc, f.created_at desc
   limit 200;
 $$;
-revoke execute on function public.ideas_board() from anon;
+revoke execute on function public.ideas_board() from public, anon;
+grant execute on function public.ideas_board() to authenticated;
 
 -- Admin list with vote counts.
 create function public.admin_feedback(status_filter text default null)
@@ -95,7 +106,7 @@ returns table (
   id uuid, user_id uuid, kind text, area text, title text, details text, screenshot_path text, platform text,
   app_version text, status text, admin_note text, is_public boolean, created_at timestamptz, votes bigint
 )
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = '' as $$
   select f.id, f.user_id, f.kind, f.area, f.title, f.details, f.screenshot_path, f.platform, f.app_version,
          f.status, f.admin_note, f.is_public, f.created_at,
          (select count(*) from public.feedback_votes v where v.feedback_id = f.id)
@@ -104,7 +115,8 @@ language sql stable security definer set search_path = public as $$
   order by f.created_at desc
   limit 500;
 $$;
-revoke execute on function public.admin_feedback(text) from anon;
+revoke execute on function public.admin_feedback(text) from public, anon;
+grant execute on function public.admin_feedback(text) to authenticated;
 
 -- Screenshots live in the private photo bucket under <user_id>/feedback/…;
 -- the owner's existing folder policies cover upload, and admins may read them.

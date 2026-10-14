@@ -15,5 +15,5 @@ alter table public.chat_messages enable row level security;
 
 -- Users read and delete their own history. Inserts happen only in the coach-chat
 -- function, so a client can't plant fake "assistant" turns into its context.
-create policy "read own chat" on public.chat_messages for select using (user_id = auth.uid());
-create policy "delete own chat" on public.chat_messages for delete using (user_id = auth.uid());
+create policy "read own chat" on public.chat_messages for select using (user_id = (select auth.uid()));
+create policy "delete own chat" on public.chat_messages for delete using (user_id = (select auth.uid()));

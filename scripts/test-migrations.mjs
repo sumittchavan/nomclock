@@ -27,7 +27,7 @@ for (const f of fs.readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) {
   console.log(`applied ${f}`);
 }
 await db.exec(`grant usage on schema public, storage to authenticated;
-  grant all on all tables in schema public to authenticated; grant all on storage.objects to authenticated;`);
+  grant all on all tables in schema public to authenticated, anon; grant all on storage.objects to authenticated, anon; grant usage on schema public, storage to anon;`);
 
 const A = "11111111-1111-1111-1111-111111111111";
 const B = "22222222-2222-2222-2222-222222222222";
@@ -77,6 +77,9 @@ check("other users' feedback is invisible", (await db.query("select count(*)::in
 check("non-admins get nothing from the admin list", (await db.query("select count(*)::int c from admin_feedback()")).rows[0].c === 0);
 check("non-admins can't triage", (await db.query("update feedback set status = 'done' returning id")).rows.length === 0);
 
+await db.exec("set role anon; select set_config('request.jwt.sub', '', false);");
+check("anonymous visitors see no photos (and no error)", (await db.query("select count(*)::int c from storage.objects")).rows[0].c === 0);
+check("anonymous visitors see no feedback (and no error)", (await db.query("select count(*)::int c from feedback")).rows[0].c === 0);
 await db.exec(`reset role; insert into admins values ('${A}')`);
 await as(A);
 check("admins see all feedback", (await db.query("select count(*)::int c from admin_feedback()")).rows[0].c === 1);

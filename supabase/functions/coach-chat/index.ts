@@ -3,17 +3,13 @@
 // `context` is today's intake summary computed on the client by buildCoachContext()
 // (the same numbers the user sees on screen). Diet, budget, tastes and foods to
 // avoid are read from the database here, so they can't be spoofed.
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { adminClient, cors, userFromRequest } from "../_shared/env.ts";
 
 const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const MODEL = Deno.env.get("COACH_MODEL") ?? Deno.env.get("ANTHROPIC_MODEL") ?? "claude-sonnet-5-5";
 const DAILY_LIMIT = Number(Deno.env.get("COACH_DAILY_LIMIT") ?? 60);
 const HISTORY_TURNS = 16;
 
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
@@ -90,15 +86,10 @@ function profileText(p: Record<string, any>) {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
-  const auth = req.headers.get("Authorization");
-  if (!auth) return json({ error: "unauthorized" }, 401);
-
-  const userClient = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, {
-    global: { headers: { Authorization: auth } },
-  });
-  const { data: { user } } = await userClient.auth.getUser();
-  if (!user) return json({ error: "unauthorized" }, 401);
-  const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  const caller = await userFromRequest(req);
+  if (!caller) return json({ error: "unauthorized" }, 401);
+  const { client: userClient, user } = caller;
+  const admin = adminClient();
 
   const body = await req.json().catch(() => ({}));
   const message = String(body.message ?? "").trim().slice(0, 1500);

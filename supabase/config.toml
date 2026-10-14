@@ -22,10 +22,10 @@ enable_signup = true
 enable_confirmations = true
 
 [functions.analyze-meal]
-verify_jwt = true
+verify_jwt = false  # each function verifies the user itself (works with new asymmetric JWT keys)
 
 [functions.coach-chat]
-verify_jwt = true
+verify_jwt = false  # each function verifies the user itself (works with new asymmetric JWT keys)
 
 [functions.delete-account]
-verify_jwt = true
+verify_jwt = false  # each function verifies the user itself (works with new asymmetric JWT keys)

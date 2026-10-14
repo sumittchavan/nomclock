@@ -5,7 +5,7 @@
 // 3. Looks each food up in USDA FoodData Central and scales it to the portion.
 //    If there is no good match (common for mixed regional dishes), falls back to Claude's estimate.
 // 4. Writes meal_items and marks the meal done.
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { cors, userFromRequest } from "../_shared/env.ts";
 
 const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
 const MODEL = Deno.env.get("ANTHROPIC_MODEL") ?? "claude-sonnet-5-5";
@@ -23,11 +23,6 @@ const USDA_MAP: Record<string, Key> = {
   "606": "satFat", "307": "sodium", "306": "potassium", "301": "calcium", "303": "iron",
   "304": "magnesium", "309": "zinc", "320": "vitaminA", "401": "vitaminC", "328": "vitaminD",
   "418": "vitaminB12", "435": "folate",
-};
-
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 const nutrientSchema = {
@@ -136,12 +131,9 @@ function scale(n: Nutrients, f: number): Nutrients {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
-  const auth = req.headers.get("Authorization");
-  if (!auth) return json({ error: "unauthorized" }, 401);
-
-  const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, {
-    global: { headers: { Authorization: auth } },
-  });
+  const caller = await userFromRequest(req);
+  if (!caller) return json({ error: "unauthorized" }, 401);
+  const supabase = caller.client;
 
   const { mealId } = await req.json().catch(() => ({}));
   if (!mealId) return json({ error: "mealId required" }, 400);

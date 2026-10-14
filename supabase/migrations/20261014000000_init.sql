@@ -94,19 +94,19 @@ alter table public.meals       enable row level security;
 alter table public.meal_items  enable row level security;
 
 create policy "own profile" on public.profiles
-  for all using (id = auth.uid()) with check (id = auth.uid());
+  for all using (id = (select auth.uid())) with check (id = (select auth.uid()));
 
 create policy "own weights" on public.weight_logs
-  for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+  for all using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 
 create policy "own meals" on public.meals
-  for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+  for all using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 
 create policy "own items" on public.meal_items
-  for all using (user_id = auth.uid())
+  for all using (user_id = (select auth.uid()))
   with check (
-    user_id = auth.uid()
-    and exists (select 1 from public.meals m where m.id = meal_id and m.user_id = auth.uid())
+    user_id = (select auth.uid())
+    and exists (select 1 from public.meals m where m.id = meal_id and m.user_id = (select auth.uid()))
   );
 
 -- ───────────────────────── storage ─────────────────────────
@@ -116,16 +116,16 @@ values ('meal-photos', 'meal-photos', false, 8388608, array['image/jpeg','image/
 on conflict (id) do nothing;
 
 create policy "read own photos" on storage.objects for select
-  using (bucket_id = 'meal-photos' and (storage.foldername(name))[1] = auth.uid()::text);
+  using (bucket_id = 'meal-photos' and (storage.foldername(name))[1] = (select auth.uid())::text);
 create policy "upload own photos" on storage.objects for insert
-  with check (bucket_id = 'meal-photos' and (storage.foldername(name))[1] = auth.uid()::text);
+  with check (bucket_id = 'meal-photos' and (storage.foldername(name))[1] = (select auth.uid())::text);
 create policy "update own photos" on storage.objects for update
-  using (bucket_id = 'meal-photos' and (storage.foldername(name))[1] = auth.uid()::text);
+  using (bucket_id = 'meal-photos' and (storage.foldername(name))[1] = (select auth.uid())::text);
 create policy "delete own photos" on storage.objects for delete
-  using (bucket_id = 'meal-photos' and (storage.foldername(name))[1] = auth.uid()::text);
+  using (bucket_id = 'meal-photos' and (storage.foldername(name))[1] = (select auth.uid())::text);
 
 -- ───────────────────────── housekeeping ─────────────────────────
-create function public.touch_updated_at() returns trigger language plpgsql as $$
+create function public.touch_updated_at() returns trigger language plpgsql set search_path = '' as $$
 begin new.updated_at = now(); return new; end $$;
 
 create trigger profiles_touch before update on public.profiles
