@@ -1,6 +1,7 @@
 name: Deploy
 
-# push to main  → database migrations + edge functions, web to Vercel, over-the-air update to the apps
+# push to main  → database migrations + edge functions, over-the-air update to the apps
+#                 (the website deploys itself through Vercel's GitHub integration)
 # tag v*        → also builds new iOS/Android binaries with EAS and submits them to the stores
 on:
   push:
@@ -31,31 +32,17 @@ jobs:
       - run: supabase link --project-ref "$PROJECT_REF"
       - name: Apply database migrations
         run: supabase db push
-      - name: Set function secrets
+      - name: Set function secrets (only those stored in GitHub; never blanks existing ones)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
         run: |
-          supabase secrets set --project-ref "$PROJECT_REF" \
-            ANTHROPIC_API_KEY="${{ secrets.ANTHROPIC_API_KEY }}" \
-            USDA_API_KEY="${{ secrets.USDA_API_KEY }}"
+          args=()
+          [ -n "$ANTHROPIC_API_KEY" ] && args+=("ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY")
+          [ -n "$USDA_API_KEY" ] && args+=("USDA_API_KEY=$USDA_API_KEY")
+          if [ ${#args[@]} -gt 0 ]; then supabase secrets set --project-ref "$PROJECT_REF" "${args[@]}"; else echo "No secrets in GitHub; keeping the ones in Supabase."; fi
       - name: Deploy edge functions
         run: supabase functions deploy analyze-meal coach-chat delete-account --project-ref "$PROJECT_REF"
-
-  web:
-    needs: backend
-    runs-on: ubuntu-latest
-    environment: production
-    env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm add -g vercel@latest
-      - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-      - run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
   mobile:
     needs: backend
