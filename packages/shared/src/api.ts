@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { FoodItem, Meal, MealSlot, Nutrients, Profile } from "./types";
+import type { ChatTurn, CoachContext, CoachOption } from "./coach";
 import { emptyNutrients, scaleNutrients } from "./nutrients";
 
 type Row = Record<string, any>;
@@ -147,7 +148,8 @@ export function createApi(sb: SupabaseClient) {
       }
       const { error } = await sb.from("meal_items").insert({
         meal_id: mealId, user_id: args.userId, name: args.item.name, portion_grams: args.item.portionGrams,
-        portion_label: args.item.portionLabel ?? null, nutrients: args.item.nutrients, source: "manual",
+        portion_label: args.item.portionLabel ?? null, nutrients: args.item.nutrients,
+        source: args.item.source === "ai_estimate" ? "ai_estimate" : "manual",
       });
       if (error) throw error;
       return mealId;
@@ -192,7 +194,37 @@ export function createApi(sb: SupabaseClient) {
       const profile = await this.getProfile();
       const meals = await this.listMeals("1970-01-01T00:00:00Z", "2999-01-01T00:00:00Z");
       const weights = await this.weightHistory("1970-01-01");
-      return { exportedAt: new Date().toISOString(), profile, weights, meals };
+      const chat = await this.chatHistory(10000);
+      return { exportedAt: new Date().toISOString(), profile, weights, meals, chat };
+    },
+
+    /** Recent coach conversation, oldest first. */
+    async chatHistory(limit = 40): Promise<ChatTurn[]> {
+      const { data, error } = await sb.from("chat_messages").select("*").order("created_at", { ascending: false }).limit(limit);
+      if (error) throw error;
+      return (data ?? []).reverse().map((r) => ({
+        id: r.id, role: r.role, createdAt: r.created_at,
+        // Assistant rows keep a text rendering for the model in `content`; the UI shows the original message.
+        content: r.payload?.message ?? r.content,
+        options: r.payload?.options ?? undefined, tip: r.payload?.tip ?? null,
+      }));
+    },
+
+    async sendChat(message: string, context: CoachContext): Promise<{ message: string; options: CoachOption[]; tip: string | null }> {
+      const { data, error } = await sb.functions.invoke("coach-chat", { body: { message, context } });
+      if (error) {
+        // Surface the function's own message (e.g. daily limit) when there is one.
+        const body = await (error as any).context?.json?.().catch(() => null);
+        throw new Error(body?.message ?? "The coach couldn't answer just now. Try again in a moment.");
+      }
+      return data;
+    },
+
+    async clearChat() {
+      const { data: { user } } = await sb.auth.getUser();
+      if (!user) return;
+      const { error } = await sb.from("chat_messages").delete().eq("user_id", user.id);
+      if (error) throw error;
     },
 
     async deleteAccount() {

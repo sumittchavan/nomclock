@@ -24,5 +24,8 @@ enable_confirmations = true
 [functions.analyze-meal]
 verify_jwt = true
 
+[functions.coach-chat]
+verify_jwt = true
+
 [functions.delete-account]
 verify_jwt = true

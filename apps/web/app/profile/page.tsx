@@ -39,8 +39,8 @@ export default function ProfilePage() {
         <h2>Your data</h2>
         <p className="soft" style={{ marginBottom: 14, maxWidth: "65ch" }}>
           Your profile, meals and photos are stored privately in Canada. Photos are only shown to you through links
-          that expire after 10 minutes, and location data is removed before upload. To estimate nutrition, each photo is
-          sent to Anthropic's Claude API, which processes it outside Canada.
+          that expire after 10 minutes, and location data is removed before upload. Meal photos and coach messages are
+          sent to Anthropic's Claude API, which processes them outside Canada.
         </p>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <button className="btn ghost" onClick={exportData} disabled={busy !== null}>{busy === "export" ? "Preparing…" : "Download my data"}</button>

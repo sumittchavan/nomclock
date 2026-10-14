@@ -29,6 +29,27 @@ scripts/         Database security test (runs in CI)
    foods (filtered by diet, budget, tastes and "never suggest" list), sodium/sugar/sat-fat limits, evening micronutrient
    gaps (with a vitamin D note for northern latitudes) and meal timing (late heavy meals, long gaps, evening-loaded days).
 
+## Coach chat
+
+The **Coach** tab (web and mobile) is a chat for in-the-moment decisions: "I feel like a cappuccino",
+"I'm getting cookies at Tim Hortons", "what should I have for dinner?".
+
+- The app sends a compact summary of today with each message (eaten vs. target, macros, low nutrients, meals so far,
+  the rule engine's notes); see `buildCoachContext()` in `packages/shared/src/coach.ts`. Diet, budget, tastes and
+  foods to avoid are read from the database by the `coach-chat` function.
+- Claude replies with a short message, 2–5 **option cards** (as usually ordered, a lighter version, a swap, a
+  healthy pick) with approximate calories and macros, and a "next time" tip. **Log this** adds an option to today
+  as an AI-estimate item.
+- The last 16 turns are sent as conversation memory. Users can clear the chat any time; it's included in data export and
+  deleted with the account.
+- Guardrails in the system prompt: no shaming, no medical advice, no compensatory restriction, and a supportive response
+  with the NEDIC helpline if someone describes disordered eating. It stays on food topics.
+- Cost control: `COACH_DAILY_LIMIT` messages per user per 24 h (default 60). `COACH_MODEL` can point the coach at a
+  cheaper model than photo analysis.
+
+Chain-menu calories come from the model's knowledge and are labelled as estimates. Adding a nutrition database for
+Canadian chains would make them exact.
+
 ## Privacy and security
 
 | Concern | What's in place |
@@ -37,7 +58,8 @@ scripts/         Database security test (runs in CI)
 | Photo location data | Stripped on device before upload (web: canvas re-encode; mobile: expo-image-manipulator). |
 | Photo access | Private bucket; photos are only served through signed URLs that expire after 10 minutes. |
 | Data residency | Supabase project in **Canada (Central), `ca-central-1`**. The web host only serves static files; no user data passes through it. |
-| Third-party processing | Each photo is sent to Anthropic's Claude API for analysis (outside Canada). Users are told this at onboarding and on the Profile page. USDA lookups send only a generic food name. |
+| Third-party processing | Each photo and each coach message (with today's intake summary) is sent to Anthropic's Claude API (outside Canada). Users are told this at onboarding and on the Profile page. USDA lookups send only a generic food name. |
+| Coach history | Readable and deletable only by its owner; only the server can write turns, so a client can't inject fake coach replies. |
 | Tokens on phones | Stored in iOS Keychain / Android Keystore (`expo-secure-store`), not plain storage. |
 | Web hardening | CSP, HSTS, `X-Frame-Options: DENY`, no third-party scripts or fonts. |
 | Access and deletion (PIPEDA) | *Download my data* exports everything as JSON; *Delete my account* removes the account, all rows (cascade) and all photos. |
@@ -115,6 +137,7 @@ The camera and image manipulator need a development build (`eas build --profile 
 | Item | Approx. |
 |---|---|
 | Claude Sonnet 5.5 per photo (~2.5k tokens in, ~600 out) | ~$0.015 per photo, so ~$1.80 per active user per month at 4 photos/day |
+| Claude Sonnet 5.5 per coach message (~2k tokens in, ~500 out) | ~$0.013 per message, so ~$1.20 per active user per month at 3 messages/day |
 | Supabase Pro (needed beyond the free tier's limits) | ~$35/month |
 | Vercel Pro (Hobby is non-commercial only) | ~$28/month per seat |
 | Apple Developer Program | ~$137/year |

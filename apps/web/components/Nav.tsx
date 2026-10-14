@@ -6,6 +6,7 @@ import { useSession } from "@/lib/session";
 const LINKS = [
   { href: "/", label: "Today" },
   { href: "/history", label: "History" },
+  { href: "/coach", label: "Coach" },
   { href: "/trends", label: "Trends" },
   { href: "/profile", label: "Profile" },
 ];

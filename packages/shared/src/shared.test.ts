@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  bmr, computeTargets, localRange, bucketMeals, isoWeekKey, localDateKey, suggestForDay, emptyNutrients,
+  bmr, computeTargets, localRange, buildCoachContext, optionToItem, bucketMeals, isoWeekKey, localDateKey, suggestForDay, emptyNutrients,
   type Meal, type Profile,
 } from "./index";
 
@@ -60,6 +60,24 @@ describe("aggregation", () => {
     expect(w.daysLogged).toBe(2);
     expect(w.total.kcal).toBe(3000);
     expect(w.dailyAverage.kcal).toBe(1500);
+  });
+});
+
+describe("coach", () => {
+  it("summarises today for the coach in local time", () => {
+    const t = computeTargets(profile, today);
+    const meals = [meal("a", "2026-10-14T20:00:00Z", "butter naan", { kcal: 900, protein: 10, carbs: 120, fat: 35 })];
+    const c = buildCoachContext(profile, t, meals, new Date("2026-10-14T21:30:00Z"));
+    expect(c.localTime).toBe("14:30");
+    expect(c.kcal).toEqual({ eaten: 900, target: t.nutrients.kcal, remaining: t.nutrients.kcal - 900 });
+    expect(c.mealsToday[0]).toMatchObject({ at: "13h", kcal: 900, items: ["butter naan"] });
+    expect(c.appNotes.length).toBeGreaterThan(0);
+  });
+  it("turns an option into a loggable AI-estimate item", () => {
+    const item = optionToItem({ name: "Small cappuccino, skim", kcal: 70, protein: 7, carbs: 10, fat: 0.2, portion_grams: 240, why: "", kind: "smarter" });
+    expect(item).toMatchObject({ name: "Small cappuccino, skim", portionGrams: 240, source: "ai_estimate" });
+    expect(item.nutrients.kcal).toBe(70);
+    expect(item.nutrients.iron).toBe(0);
   });
 });
 

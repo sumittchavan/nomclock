@@ -34,7 +34,7 @@ export default function ProfileTab() {
         <ProfileForm initial={profile} userId={profile.id} submitLabel="Save changes"
           onSave={async (p) => { await api.saveProfile(p); await reloadProfile(); Alert.alert("Changes saved", "Your targets are updated."); }} />
         <Section title="Your data">
-          <T soft>Your profile, meals and photos are stored privately in Canada. Photos are only shown to you through links that expire after 10 minutes, and location data is removed before upload. To estimate nutrition, each photo is sent to Anthropic's Claude API, which processes it outside Canada.</T>
+          <T soft>Your profile, meals and photos are stored privately in Canada. Photos are only shown to you through links that expire after 10 minutes, and location data is removed before upload. Meal photos and coach messages are sent to Anthropic's Claude API, which processes them outside Canada.</T>
           <View style={{ gap: 10 }}>
             <Button kind="ghost" title={busy === "export" ? "Preparing…" : "Export my data"} busy={busy === "export"} onPress={exportData} />
             <Button kind="ghost" title="Sign out" onPress={() => supabase.auth.signOut()} />

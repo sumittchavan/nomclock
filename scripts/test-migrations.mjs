@@ -40,6 +40,7 @@ await db.exec(`
   insert into meals(id, user_id, eaten_at) values ('${MEAL}', '${A}', '2026-10-15T05:00:00Z');
   insert into meal_items(meal_id, user_id, name, portion_grams, nutrients) values ('${MEAL}', '${A}', 'dal', 200, '{"kcal":250,"protein":14}');
   insert into storage.objects(bucket_id, name) values ('meal-photos', '${A}/${MEAL}.jpg');
+  insert into chat_messages(user_id, role, content) values ('${A}', 'user', 'craving a cappuccino');
 `);
 
 const as = (uid) => db.exec(`set role authenticated; select set_config('request.jwt.sub', '${uid}', false);`);
@@ -54,7 +55,11 @@ check("can't add items to someone else's meal", await rejects(`insert into meal_
 check("can't upload into someone else's photo folder", await rejects(`insert into storage.objects(bucket_id, name) values ('meal-photos', '${A}/evil.jpg')`));
 check("can't create a meal as someone else", await rejects(`insert into meals(user_id) values ('${A}')`));
 
+check("other users' chat history is invisible", (await db.query("select count(*)::int c from chat_messages")).rows[0].c === 0);
+check("clients can't write chat turns directly", await rejects(`insert into chat_messages(user_id, role, content) values ('${B}', 'assistant', 'fake')`));
+
 await as(A);
+check("own chat history is visible", (await db.query("select count(*)::int c from chat_messages")).rows[0].c === 1);
 const totals = (await db.query("select day::text, kcal::int from daily_totals")).rows;
 check("daily totals use the user's local date", totals.length === 1 && totals[0].day === "2026-10-14" && totals[0].kcal === 250);
 check("can upload into own photo folder", !(await rejects(`insert into storage.objects(bucket_id, name) values ('meal-photos', '${A}/ok.jpg')`)));
@@ -65,6 +70,7 @@ check("under-18 profiles are rejected", await rejects(`insert into auth.users va
 
 await db.exec(`delete from auth.users where id = '${A}'`);
 check("deleting a user removes their meals", (await db.query("select count(*)::int c from meals")).rows[0].c === 0);
+check("deleting a user removes their chat history", (await db.query("select count(*)::int c from chat_messages")).rows[0].c === 0);
 
 if (failures) { console.error(`\n${failures} check(s) failed`); process.exit(1); }
 console.log("\nAll database checks passed");

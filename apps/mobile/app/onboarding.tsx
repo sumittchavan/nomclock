@@ -17,7 +17,7 @@ export default function Onboarding() {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
       <ScrollView style={{ backgroundColor: t.bg }} contentContainerStyle={{ paddingTop: insets.top + 16, paddingHorizontal: 16, paddingBottom: 60, gap: 16 }} keyboardShouldPersistTaps="handled">
         <T v="h1">Set up your profile</T>
-        <T soft>Your targets and suggestions are based on these details. Only you can see them. Your data is stored in Canada; meal photos you log are sent to Anthropic's Claude API to estimate their nutrition.</T>
+        <T soft>Your targets and suggestions are based on these details. Only you can see them. Your data is stored in Canada; meal photos and coach messages are sent to Anthropic's Claude API to estimate nutrition and give suggestions.</T>
         <ProfileForm initial={null} userId={session.user.id} submitLabel="Save and start logging"
           onSave={async (p) => { await api.saveProfile(p); await reloadProfile(); router.replace("/"); }} />
       </ScrollView>
