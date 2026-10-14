@@ -1,0 +1,14 @@
+node_modules
+.next
+.expo
+dist
+build
+*.log
+.env
+.env.local
+.env.*.local
+supabase/.temp
+supabase/.branches
+.vercel
+ios
+android

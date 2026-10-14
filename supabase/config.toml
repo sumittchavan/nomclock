@@ -1,0 +1,28 @@
+project_id = "nutrisnap"
+
+[api]
+port = 54321
+schemas = ["public", "storage"]
+
+[db]
+port = 54322
+major_version = 15
+
+[storage]
+file_size_limit = "8MiB"
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["nutrisnap://auth-callback"]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+
+[functions.analyze-meal]
+verify_jwt = true
+
+[functions.delete-account]
+verify_jwt = true
