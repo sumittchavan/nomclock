@@ -50,6 +50,31 @@ The **Coach** tab (web and mobile) is a chat for in-the-moment decisions: "I fee
 Chain-menu calories come from the model's knowledge and are labelled as estimates. Adding a nutrition database for
 Canadian chains would make them exact.
 
+## Ideas and feedback
+
+Users can suggest features, ask for changes or report bugs from **Profile → Ideas and feedback**, or from the
+"Suggest an idea" link at the bottom of every screen, which pre-selects the part of the app they were on.
+
+- **Suggest:** type, area, one-line title, optional details and an optional screenshot. Screenshots are re-encoded,
+  so their metadata is stripped. Platform and app version are attached automatically. Each user can send up to 10 a day.
+- **Your suggestions:** status (Received → Under review → Planned → In progress → Shipped / Not planned) and the team's
+  reply. Users can withdraw a suggestion while it's still new.
+- **Ideas board:** ideas you choose to publish, with upvotes (one per user). The submitter is never shown.
+
+### Reviewing feedback (admin)
+1. Make yourself an admin once, in the Supabase SQL editor:
+   ```sql
+   insert into public.admins (user_id)
+   select id from auth.users where email = 'you@example.com';
+   ```
+   There's no way to become admin through the app or API.
+2. Open **/admin** on the web app (Profile shows a *Review feedback* button for admins). Filter by status, read
+   details and screenshots, set status, write a reply, and tick *Show on the public ideas board*. The page warns you
+   if a suggestion you're about to publish seems to contain an email address or phone number.
+
+Optional: to get an email or Slack message for each new suggestion, add a Supabase Database Webhook on
+`feedback` inserts.
+
 ## Privacy and security
 
 | Concern | What's in place |
@@ -59,6 +84,7 @@ Canadian chains would make them exact.
 | Photo access | Private bucket; photos are only served through signed URLs that expire after 10 minutes. |
 | Data residency | Supabase project in **Canada (Central), `ca-central-1`**. The web host only serves static files; no user data passes through it. |
 | Third-party processing | Each photo and each coach message (with today's intake summary) is sent to Anthropic's Claude API (outside Canada). Users are told this at onboarding and on the Profile page. USDA lookups send only a generic food name. |
+| Feedback | Private to the submitter and admins. The public board shows only title, details, status and reply, never the submitter. Admin rights are granted only via SQL. |
 | Coach history | Readable and deletable only by its owner; only the server can write turns, so a client can't inject fake coach replies. |
 | Tokens on phones | Stored in iOS Keychain / Android Keystore (`expo-secure-store`), not plain storage. |
 | Web hardening | CSP, HSTS, `X-Frame-Options: DENY`, no third-party scripts or fonts. |

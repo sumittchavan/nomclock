@@ -6,3 +6,4 @@ export * from "./foods";
 export * from "./suggestions";
 export * from "./api";
 export * from "./coach";
+export * from "./feedback";

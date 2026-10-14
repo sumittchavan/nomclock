@@ -68,6 +68,37 @@ await db.exec("reset role");
 check("under-18 profiles are rejected", await rejects(`insert into auth.users values ('33333333-3333-3333-3333-333333333333');
   insert into profiles(id, birth_date, sex, height_cm, weight_kg) values ('33333333-3333-3333-3333-333333333333', '2015-01-01', 'male', 140, 40)`));
 
+// ── feedback ──
+await as(B);
+check("users can submit feedback", !(await rejects(`insert into feedback(kind, area, title, details) values ('feature', 'coach', 'Barcode scanning', 'Scan packaged food')`)));
+check("users can't set status, reply or visibility", await rejects(`insert into feedback(kind, title, status, is_public) values ('feature', 'Sneaky', 'done', true)`));
+await as(A);
+check("other users' feedback is invisible", (await db.query("select count(*)::int c from feedback")).rows[0].c === 0);
+check("non-admins get nothing from the admin list", (await db.query("select count(*)::int c from admin_feedback()")).rows[0].c === 0);
+check("non-admins can't triage", (await db.query("update feedback set status = 'done' returning id")).rows.length === 0);
+
+await db.exec(`reset role; insert into admins values ('${A}')`);
+await as(A);
+check("admins see all feedback", (await db.query("select count(*)::int c from admin_feedback()")).rows[0].c === 1);
+const fid = (await db.query("select id from admin_feedback()")).rows[0].id;
+await db.exec(`update feedback set status = 'planned', admin_note = 'Coming in November', is_public = true where id = '${fid}'`);
+
+await as(B);
+const board = (await db.query("select * from ideas_board()")).rows;
+check("published ideas appear on the board with the reply", board.length === 1 && board[0].status === "planned" && board[0].admin_note === "Coming in November");
+check("the board never exposes who submitted", !("user_id" in board[0]));
+check("users can't triage their own feedback", (await db.query("update feedback set status = 'done' returning id")).rows.length === 0);
+check("users can upvote public ideas", !(await rejects(`insert into feedback_votes(feedback_id) values ('${fid}')`)));
+check("one vote per user", await rejects(`insert into feedback_votes(feedback_id) values ('${fid}')`));
+check("votes are counted on the board", (await db.query("select votes::int v, my_vote from ideas_board()")).rows[0].v === 1);
+await db.exec(`reset role; insert into feedback(user_id, kind, title) values ('${A}', 'bug', 'Private bug')`);
+const privId = (await db.query("select id from feedback where title = 'Private bug'")).rows[0].id;
+await as(B);
+check("can't vote on private feedback", await rejects(`insert into feedback_votes(feedback_id) values ('${privId}')`));
+for (let i = 0; i < 9; i++) await db.exec(`insert into feedback(kind, title) values ('other', 'Idea number ${i}')`);
+check("submissions are capped at 10 a day", await rejects(`insert into feedback(kind, title) values ('other', 'One too many')`));
+await db.exec("reset role");
+
 await db.exec(`delete from auth.users where id = '${A}'`);
 check("deleting a user removes their meals", (await db.query("select count(*)::int c from meals")).rows[0].c === 0);
 check("deleting a user removes their chat history", (await db.query("select count(*)::int c from chat_messages")).rows[0].c === 0);

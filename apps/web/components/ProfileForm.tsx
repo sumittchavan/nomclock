@@ -47,7 +47,7 @@ export function ProfileForm({ initial, userId, onSave, submitLabel }: {
         <div className="form-grid">
           <label>Name<input required value={p.displayName} onChange={(e) => set("displayName", e.target.value)} /></label>
           <label>Date of birth<input type="date" required value={p.birthDate} onChange={(e) => set("birthDate", e.target.value)} /></label>
-          <label>Sex <span className="soft small" style={{ fontWeight: 400 }}>used for energy and nutrient targets</span>
+          <label><span>Sex <span className="soft small" style={{ fontWeight: 400 }}>used for energy and nutrient targets</span></span>
             <select value={p.sex} onChange={(e) => set("sex", e.target.value as Profile["sex"])}>
               <option value="female">Female</option><option value="male">Male</option>
             </select>
@@ -59,7 +59,7 @@ export function ProfileForm({ initial, userId, onSave, submitLabel }: {
               {COUNTRIES.map(([c, n]) => <option key={c} value={c}>{n}</option>)}
             </select>
           </label>
-          <label>Province or region <span className="soft small" style={{ fontWeight: 400 }}>optional</span><input value={p.region ?? ""} onChange={(e) => set("region", e.target.value)} /></label>
+          <label><span>Province or region <span className="soft small" style={{ fontWeight: 400 }}>optional</span></span><input value={p.region ?? ""} onChange={(e) => set("region", e.target.value)} /></label>
           <label>Time zone<input value={p.timezone} onChange={(e) => set("timezone", e.target.value)} /></label>
         </div>
       </fieldset>

@@ -89,6 +89,10 @@ export function DayScreen({ dateKey, title, header }: { dateKey: string; title?:
             )}
           </Section>
         </View>
+        <View style={{ marginTop: 28, gap: 8, alignItems: "flex-start" }}>
+          <T v="small" soft>Missing something, or something not working?</T>
+          <Button small kind="ghost" title="Suggest an idea" onPress={() => router.push({ pathname: "/feedback", params: { area: title === "Today" ? "today" : "history" } })} />
+        </View>
       </ScrollView>
       <Button
         title="+ Add meal"

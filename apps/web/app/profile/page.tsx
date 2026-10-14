@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { api, supabase } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { ProfileForm } from "@/components/ProfileForm";
@@ -8,6 +9,8 @@ export default function ProfilePage() {
   const { session, profile, reloadProfile } = useSession();
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => { api.feedback.isAdmin().then(setIsAdmin); }, []);
   if (!session || !profile) return null;
 
   const exportData = async () => {
@@ -34,6 +37,15 @@ export default function ProfilePage() {
         onSave={async (p) => { await api.saveProfile(p); await reloadProfile(); setSaved(true); setTimeout(() => setSaved(false), 2500); }}
       />
       {saved && <p role="status">Changes saved. Your targets are updated.</p>}
+
+      <section className="section">
+        <h2>Ideas and feedback</h2>
+        <p className="soft" style={{ marginBottom: 14, maxWidth: "65ch" }}>Suggest a feature, ask for a change, report a problem, or vote on other people's ideas.</p>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <Link className="btn ghost" href="/feedback?area=profile" style={{ textDecoration: "none" }}>Suggest an idea</Link>
+          {isAdmin && <Link className="btn ghost" href="/admin" style={{ textDecoration: "none" }}>Review feedback</Link>}
+        </div>
+      </section>
 
       <section className="section">
         <h2>Your data</h2>

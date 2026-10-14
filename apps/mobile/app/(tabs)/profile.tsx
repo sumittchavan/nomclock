@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, Share, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { api, supabase } from "@/lib/supabase";
 import { useSession } from "@/lib/session";
 import { useTheme } from "@/lib/theme";
@@ -11,6 +12,7 @@ export default function ProfileTab() {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const { profile, reloadProfile } = useSession();
+  const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
   if (!profile) return null;
 
@@ -33,6 +35,10 @@ export default function ProfileTab() {
         <T v="h1">Profile</T>
         <ProfileForm initial={profile} userId={profile.id} submitLabel="Save changes"
           onSave={async (p) => { await api.saveProfile(p); await reloadProfile(); Alert.alert("Changes saved", "Your targets are updated."); }} />
+        <Section title="Ideas and feedback">
+          <T soft>Suggest a feature, ask for a change, report a problem, or vote on other people's ideas.</T>
+          <Button kind="ghost" title="Suggest an idea" onPress={() => router.push({ pathname: "/feedback", params: { area: "profile" } })} />
+        </Section>
         <Section title="Your data">
           <T soft>Your profile, meals and photos are stored privately in Canada. Photos are only shown to you through links that expire after 10 minutes, and location data is removed before upload. Meal photos and coach messages are sent to Anthropic's Claude API, which processes them outside Canada.</T>
           <View style={{ gap: 10 }}>

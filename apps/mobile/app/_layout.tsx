@@ -34,6 +34,7 @@ function Gate() {
         <Stack.Screen name="login" />
         <Stack.Screen name="onboarding" />
         <Stack.Screen name="add" options={{ presentation: "modal" }} />
+        <Stack.Screen name="feedback" />
       </Stack>
     </>
   );

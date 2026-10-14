@@ -215,3 +215,26 @@ input:focus, select:focus, textarea:focus { border-color: var(--focus); outline:
 }
 @keyframes blink { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
 @media (max-width: 560px) { .opt { grid-template-columns: 1fr; padding-right: 0; } .opt-side { display: flex; justify-content: space-between; align-items: center; } }
+
+/* ── feedback ── */
+.site-footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 40px; }
+@media (max-width: 720px) { .site-footer { padding-bottom: calc(150px + env(safe-area-inset-bottom)); } }
+.ideas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.idea { display: grid; grid-template-columns: 56px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.idea.mine-row { grid-template-columns: 1fr auto; }
+.vote { font: inherit; display: grid; justify-items: center; gap: 2px; padding: 8px 0; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink-soft); cursor: pointer; }
+.vote.on { border-color: var(--ink); background: var(--ink); color: var(--porcelain); }
+.vote .num { font-weight: 800; font-size: 1.05rem; }
+.reply { border-left: 2px solid var(--line); padding-left: 10px; color: var(--ink-soft); }
+.reply b { color: var(--ink); }
+.sent { padding: 12px 14px; border-left: 4px solid var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
+.tag.status-planned, .tag.status-in_progress { border-color: var(--carbs); color: var(--ink); }
+.tag.status-done { border-color: var(--good); color: var(--good); }
+.tag.status-declined { text-decoration: line-through; }
+textarea { resize: vertical; }
+.admin-row { border-bottom: 1px solid var(--line); }
+.admin-head { font: inherit; color: inherit; width: 100%; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 14px 4px; background: none; border: 0; text-align: left; cursor: pointer; }
+.admin-body { display: grid; gap: 14px; padding: 0 4px 20px; }
+.admin-shot { max-width: 100%; max-height: 360px; border-radius: 12px; border: 1px solid var(--line); }
+.seg button { white-space: nowrap; }
+@media (max-width: 560px) { .seg { max-width: 100%; overflow-x: auto; } .seg button { padding: 6px 12px; } }

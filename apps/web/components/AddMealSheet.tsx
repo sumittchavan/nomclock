@@ -88,7 +88,7 @@ export function AddMealSheet({ defaultTime, onClose, onLogged }: {
             </select>
           </label>
         </div>
-        <label>Anything the photo won't show? <span className="soft" style={{ fontWeight: 400 }}>(optional)</span>
+        <label><span>Anything the photo won't show? <span className="soft" style={{ fontWeight: 400 }}>(optional)</span></span>
           <input placeholder="e.g. cooked in ghee, 2 rotis, no sugar in chai" value={note} onChange={(e) => setNote(e.target.value)} />
         </label>
         {error && <p className="error" role="alert">{error}</p>}

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { FoodItem, Meal, MealSlot, Nutrients, Profile } from "./types";
 import type { ChatTurn, CoachContext, CoachOption } from "./coach";
+import { createFeedbackApi } from "./feedback";
 import { emptyNutrients, scaleNutrients } from "./nutrients";
 
 type Row = Record<string, any>;
@@ -75,6 +76,8 @@ export function slotForHour(h: number): MealSlot {
 
 export function createApi(sb: SupabaseClient) {
   return {
+    feedback: createFeedbackApi(sb),
+
     async getProfile(): Promise<Profile | null> {
       const { data: { user } } = await sb.auth.getUser();
       if (!user) return null;
@@ -195,7 +198,8 @@ export function createApi(sb: SupabaseClient) {
       const meals = await this.listMeals("1970-01-01T00:00:00Z", "2999-01-01T00:00:00Z");
       const weights = await this.weightHistory("1970-01-01");
       const chat = await this.chatHistory(10000);
-      return { exportedAt: new Date().toISOString(), profile, weights, meals, chat };
+      const feedback = await this.feedback.mine();
+      return { exportedAt: new Date().toISOString(), profile, weights, meals, chat, feedback };
     },
 
     /** Recent coach conversation, oldest first. */
